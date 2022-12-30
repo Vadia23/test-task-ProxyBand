@@ -1,0 +1,29 @@
+.albums {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 30px;
+    row-gap: 30px;
+    &__item {
+        cursor: pointer;
+        margin: 0 auto;
+        width: 200px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        background-color: rgba($color: #373535, $alpha: 0.2);
+        img {
+            display: block;
+            margin: 0 auto;
+            margin-top: 20px;
+            width: 80px;
+            height: 80px;
+        }
+        span {
+            font-size: 18px;
+            font-weight: 400;
+            text-align: center;
+            margin-top: 15px;
+        }
+    }
+}
