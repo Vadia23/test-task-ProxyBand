@@ -1,7 +1,5 @@
-import {useEffect} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetched, fetching, fetchingError } from '../../../reducer/reducer';
 
 import Spinner from '../../spinner/Spinner';
 import ErrorMessage from '../../errorMessage/ErrorMessage';
@@ -10,17 +8,14 @@ import img from '../../../resources/img/noImage2.png';
 import './PostsPage.scss';
 
 const PostsPage = () => {
+    const {posts, loadingStatus} = useSelector(state => state.posts);
+    const {userName} = useSelector(state => state.users);
 
-    const dispatch = useDispatch();
-    const {data, userId, userName, loadingStatus} = useSelector(state => state);
-    useEffect(() => {
-        dispatch(fetching())
-        fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`)
-            .then((response) => response.json())
-            .then((json) => dispatch(fetched(json)))
-            .catch(err => dispatch(fetchingError())) 
-            // eslint-disable-next-line
-    }, [userId])
+    if (loadingStatus === 'loading') {
+        return <Spinner/>
+    } else if (loadingStatus === 'error') {
+        return <ErrorMessage/> 
+    }
 
     function renderItems(arr) {
         const items = arr.map((item) => {
@@ -40,8 +35,7 @@ const PostsPage = () => {
             </div>
         )
     }
-    const items = renderItems(data);
-    const result = loadingStatus === 'loading' ? <Spinner/> : loadingStatus === 'error' ? <ErrorMessage/> : items;
+    const items = renderItems(posts);
          
     return (
         <div>
@@ -49,11 +43,9 @@ const PostsPage = () => {
             <div className="title">{`Posts by: ${userName}`}</div>
             <Link to='/'><span>Back to all users</span></Link>
             </div>
-            {result}
+            {items}
         </div>
     );
 }
-
-
 
 export default PostsPage;
